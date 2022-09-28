@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
+    <title>Document</title>
+    <style>
+        *{
+            padding: 0;
+            margin: 0;
+        }
+        
+        body{
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+            width: 970px;
+            margin: 0 auto;
+        }
+
+        th,td{
+            border: 2px solid gray;
+        }
+
+        .first,.third{
+            text-align: center;
+        }
+
+        .second,.fourth,.fifth{
+            text-align: center;
+            width: 25%;
+        }
+        
+    </style>
+</head>
+<body>
+    <h1>All Shows</h1>
+    <table class="table table-dark table-striped">
+        <tr>
+            <th class="first">id</th>
+            <th class="second">title</th>
+            <th class="third">network</th>
+            <th class="fourth">release_date</th>
+            <th class="fifth">Actions</th>
+        </tr>
+        {% for show in shows %}
+        <tr>
+            <td class="first">{{show.id}}</td>
+            <td class="second">{{show.title}}</td>
+            <td class="third">{{show.network}}</td>
+            <td class="fourth">{{show.released_at}}</td>
+            <td class="fifth">
+                <a href="/shows/{{ show.id }}">View</a><span> |</span>
+                <a href="/shows/{{ show.id }}/edit">Edit</a><span> |</span>
+                <a href="/shows/{{ show.id }}/destroy">Delete</a>
+            </td>
+            
+        </tr>
+        {%endfor%}
+    </table>
+    <a href="/shows/new">Add a New Show</a>
+</body>
+</html>

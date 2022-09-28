@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        *{
+            padding: 0;
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        body{
+            width: 970px;
+            margin: 0 auto;
+            display: flex;
+        }
+
+        .container{
+            border: 2px solid black;
+            padding: 5px;
+            width: 420px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 60px;
+        }
+
+        .middle-body{
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        .updated{
+            display: flex;
+            flex-direction: column;
+            margin-top: 50px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>TV Show {{ show.id }}</h1>
+        </div>
+        <div class="middle-body">
+            <label for="">Title: {{ show.title }}</label>
+            <label for="">Release Date: {{ show.released_at }}</label>
+            <p>{{ show.desc }}</p>
+        </div>
+        <div class="updated">
+            <label for="">Last Updated: {{ show.updated_at }}</label>
+            <div>
+                <a href="/shows/{{ show.id }}/edit">Edit</a> <span> |</span>
+                <a href="/shows/{{ show.id }}/destroy">Delete</a>
+            </div>
+        </div>
+    </div>
+</body>
+<a href="\">go back</a>
+</html>

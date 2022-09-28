@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        *{
+            padding: 0;
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        body{
+            width: 970px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .container{
+            width:420px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+        }
+
+        .title{
+            display: flex;
+            flex-direction: column;
+            width: 420px;
+        }
+
+        .network{
+            display: flex;
+            flex-direction: column;
+            width: 200px;
+        }
+
+        .release{
+            display: flex;
+            flex-direction: column;
+            width: 200px;
+        }
+
+        .network_release{
+            display: flex;
+            justify-content: space-between;
+            flex-direction: row;
+            width: 420px;
+        }
+
+        .description{
+            display: flex;
+            flex-direction: column;
+            width: 420px;
+        }
+
+        form{
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        input{
+            height: 40px;
+            font-size: 20px;
+        }
+
+        label{
+            font-size: 20px;
+        }
+
+        input.button{
+            height: 30px;
+            width: 80px;
+            font-size: 15px;
+            margin-left:170px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Add a New Show</h1>
+        </div>
+        <form action="/shows/create" method="POST">
+            {% csrf_token %}
+            <div class="title"><label for="title">Title </label><input type="text" name="title" required></div>
+            <div class="network_release">
+                <div class="network"><label for="network">Network </label><input type="text" name="network" required></div>
+                <div class="release"><label for="release">Release Date </label><input type="date" name="release" required></div>
+            </div>
+            <div class="description">
+                <label for="title">Description </label>
+                <textarea name="desc" id="" cols="30" rows="10" required></textarea>
+            </div>
+            <input class="button" type="submit" value="Create">
+        </form>
+    </div>
+</body>
+<a href="\">go back</a>
+</html>
