@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+
+        body{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .header{
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 2px solid black;
+            width: 100%;
+        }
+
+        h1{
+            margin-left: 30px;
+        }
+
+        .logout{
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 300px;
+            margin-right: 30px;
+        }
+
+        .logout input{
+            background-color: blue;
+            color: white;
+            cursor: pointer;
+            width: 60px;
+            height: 30px;
+        }
+
+        .post_message{
+            display: flex;
+            flex-direction: column;
+            align-items: end;
+            margin-top: 50px;
+        }
+
+        textarea{
+            font-size: 20px;
+        }
+
+        .post_message input{
+            cursor: pointer;
+            width: 120px;
+            height: 30px;
+            background-color: blue;
+            color: white;
+            box-shadow: 2px 2px 1px 1px black;
+        }
+
+        .post_comment{
+            display: flex;
+            flex-direction: column;
+            align-items: end;
+            margin-top: 50px;
+        }
+
+        .post_comment input{
+            cursor: pointer;
+            width: 120px;
+            height: 30px;
+            background-color: blue;
+            color: white;
+            box-shadow: 2px 2px 1px 1px black;
+        }
+
+        .message{
+            width: 1000px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .message a{
+            text-decoration: none;
+            color: white;
+        }
+
+        .message button{
+            background-color: blue;
+            width: 50px;
+            height: 30px;
+            margin: 10px;
+        }
+
+        .message .button{
+            display: flex;
+            justify-content: end;
+        }
+
+        .messenger{
+            border: 2px solid black;
+            padding: 10px;
+            margin-top: 20px;
+        }
+
+        textarea#comment{
+            width: 100%;
+        }
+
+        p{
+            margin-top: 10px;
+            width: 100%;
+        }
+
+        li{
+            list-style: none;
+        }
+
+        ul{
+            border: 2px solid black;
+            margin: 5px;
+            padding: 5px;
+        }
+
+    </style>
+    <body>
+        <form class="header" action="/logout">
+            {% csrf_token %}
+            <h1>CodingDojo Wall</h1>
+            <div class="logout">
+                <h3>Welcome {{ user.first_name }}!</h3>
+                <input type="submit" value="Log off">
+            </div>
+        </form>
+        <form class="post_message" action="add_message" method="POST">
+            {% csrf_token %}
+            <div>
+                <h2>Post a message</h2>
+                <textarea name="add_message" id="message" cols="100" rows="8"></textarea>
+            </div>
+            <input type="submit" value="Post Message" >
+        </form>
+            <h2>Wall Messages:</h2>
+        {% if post_data %}
+        {% for post in post_data %}
+        <div class="message">
+                <div class="messenger">
+                    <h3>{{ post.user.first_name }} {{ post.user.last_name }} </h3><h6>{{ post.created_at }}</h6>
+                    <p>{{ post.message }}</p>
+                {% if post.user.id == request.session.id %}
+                    <div class="button"><button><a href="/delete_message/{{post.id}}">Delete</a></button></div>
+                </div>
+                {% endif %}
+                <h4>Comments:</h4>
+                {% if comment_data %}
+                    {% for comment in comment_data %}
+                    {% if comment.message.id == post.id %}
+                        <ul>
+                            <li>{{ comment.user.first_name }} {{ comment.user.last_name }}<h6>{{ post.created_at }}</h6></li>
+                            <li><p>{{comment.comment}}</p></li>
+                        </ul>
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+                <form class="post_comment" action="/comment" method='POST'>
+                    {% csrf_token %}
+                    <div>
+                        <p>Post a comment</p>
+                        <input type="hidden" value={{post.id}} name="message_ID">
+                        <textarea name="comment" id="comment" cols="100" rows="2"></textarea>
+                    </div>
+                    <input type="submit" value="Post Comment">
+                </form>
+            </div>
+            {% endfor %}
+        {% endif %}
+        {% if messages %}
+        <ul class="messages">    
+            {% for message in messages %}    
+                <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>    
+            {% endfor %}
+        </ul>
+        {% endif %}
+</body>
+</html>
