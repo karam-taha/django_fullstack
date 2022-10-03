@@ -45,8 +45,6 @@ def login(request):
     return redirect('/')
 
 def success(request):
-    if 'user' not in request.session:
-        return redirect('/')
     email = request.session['email']
     user = User.objects.filter(email=email)
     context = {
