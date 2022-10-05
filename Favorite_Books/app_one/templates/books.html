@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        body{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            
+        }
+
+        .header{
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        .line{
+            background-color: black;
+            width: 95%;
+            height: 5px;
+            border-radius: 50%;
+            margin-top: 10px;
+        }
+
+        .content{
+            display: flex;
+            justify-content: space-around;
+            width: 90%;
+            margin-top: 50px;
+        }
+
+        h1{
+            margin-left: 50px;
+        }
+
+        .header input{
+            background-color: blue;
+            color: white;
+            cursor: pointer;
+            width: 60px;
+            height: 30px;
+            margin-right: 50px;
+        }
+
+        .add_book{
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .add_book button{
+            width: 80px;
+            height: 40px;
+            cursor: pointer;
+            background-color: blue;
+            color: white;
+        }
+
+        .title input{
+            width: 250px;
+            font-size: 20px;
+        }
+
+        .add_book .title,
+        .add_book .desc{
+            display: flex;
+            width: 350px;
+            justify-content: space-between;
+        }
+
+        .button{
+            width: 100%;
+            display: flex;
+            justify-content: center;
+        }
+
+        textarea{
+            font-size: 20px;
+            width: 250px;
+        }
+
+        p{
+            width: 100%;
+        }
+
+        .list{
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            font-size: 20px;
+        }
+
+    </style>
+    <body>
+        <form class="header" action="/logout">
+            {% csrf_token %}
+                <h1>Welcome, {{ user.first_name }}!</h1>
+                <input type="submit" value="Log off">
+        </form>
+        <div class="line"></div>
+        <div class="content">
+            <form class="add_book" action="/add_book" method="POST">
+                {% csrf_token %}
+                <h2>Add a Favorite Book</h2>
+                <div class="title"><h4>Title</h4><input type="text" name="title"></div>
+                <div class="desc"><h4>Description</h4><textarea name="description" id="" cols="25" rows="5"></textarea></div>
+                <div class="button"><button type="submit">Add</button></div>
+                {% if messages %}
+                <ul class="messages">    
+                    {% for message in messages %}    
+                        <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>    
+                    {% endfor %}
+                </ul>
+                {% endif %}
+            </form>
+            <div class="list">
+                <h2>All Books</h2>
+                {% for books in booklist%}
+                <div>
+                    <p class = 'book_title'><a href="/books/{{books.id}}">{{books.title}}</a></p>
+                    <p>(Added by {{books.uploaded_by.first_name}} {{books.uploaded_by.last_name}})</p>
+                    {% if user not in books.users_who_like.all %}
+                        <p><a href="/books/{{books.id}}/favorite">Add to favorites</a></p>
+                    {%else%}
+                        <p class = 'italic'>this is one of your favorites</p>
+                    {% endif %}
+                </div>
+            {% endfor %}
+            </div>
+        </div>
+        
+</body>
+</html>

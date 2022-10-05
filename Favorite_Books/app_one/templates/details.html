@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        *{
+            padding: 0;
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        body{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            
+        }
+
+        .header{
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        h1{
+            margin-left: 50px;
+        }
+
+        .header button{
+            background-color: blue;
+            cursor: pointer;
+            width: 60px;
+            height: 30px;
+            margin-right: 50px;
+        }
+
+        .header a{
+            color: white;
+            text-decoration: none;
+        }
+
+        .line{
+            background-color: black;
+            width: 95%;
+            height: 5px;
+            border-radius: 50%;
+            margin-top: 10px;
+        }
+
+        .wrapper{
+            display: flex;
+            justify-content: space-between;
+            width: 90%;
+        }
+
+        .book_details{
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .book_details h2{
+            margin-top: 20px;
+        }
+
+        form{
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        form .buttons{
+            width: 87%;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        form button{
+            width: 90px;
+            height: 30px;
+            cursor: pointer;
+            background-color: white;
+            box-shadow: 2px 2px 1px 1px black;
+        }
+
+        .delete{
+            background-color: red;
+            color: white;
+        }
+
+        .description{
+            display: flex;
+            gap: 10px;
+        }
+
+        p{
+            font-size: 20px;
+        }
+
+        .likes ul{
+            font-size: 20px;
+            margin-left: 50px;
+        }
+
+        textarea{
+            font-size: 20px;
+        }
+
+        form input{
+            margin-top: 20px;
+            font-size: 30px;
+            text-align: center;
+            border: 3px solid black;
+        }
+
+        .likes{
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            margin-left: 200px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Welcome, {{userid.first_name}}!</h1>
+        <button><a href="/logout">Log Out</a></button>
+    </div>
+    <div class="line"></div>
+    <hr>
+    <div class="wrapper">
+        <div class="book_details">
+                {% if userid.id != details.uploaded_by.id %}
+                    <h2>{{details.title}}</h2>
+                    <p>Added by: {{details.uploaded_by.first_name}} {{details.uploaded_by.last_name}}</p>
+                    <p>Added on: {{details.created_at}}</p>
+                    <p>Last updated: {{details.updated_at}}</p>
+                    <p>Description: {{details.description}}</p>
+                {% else %}
+                    <form action="/books/{{details.id}}/edit" method="post">
+                        {% csrf_token %}
+                        <input type="text" name = 'title' value = '{{details.title}}'>
+                        <p>Added by: {{details.uploaded_by.first_name}} {{details.uploaded_by.last_name}}</p>
+                        <p>Added on: {{details.created_at}}</p>
+                        <p>Last updated: {{details.updated_at}}</p>
+                        <div class="description"><p>Description:</p> <textarea name="description" id = 'description' cols="35" rows="5">{{details.description}}</textarea></div>
+                        <div class="buttons">
+                            <button type="submit" class="update">Update</button>
+                            <button type="submit" class="delete" formaction="/books/{{details.id}}/delete">Delete</button>
+                        </div>
+                    </form>
+                {% endif %}
+
+        </div>
+        <div class="likes">
+            <h2>Users Who Like This Book:</h2>
+            <ul>
+            {%for detail in details.users_who_like.all%}
+                <li>{{detail.first_name}} {{detail.last_name}}</li>
+            {%empty%}
+                <p>No users have made this book a favorite yet!</p>
+            {%endfor%}
+            </ul>
+            {%if userid not in details.users_who_like.all%}
+                        <p><a href="/books/{{details.id}}/favorite">Add to favorites</a></p>
+                    {%elif userid in details.users_who_like.all%}
+                        <a href="/books/{{details.id}}/unfavorite">Un-Favorite</a>
+            {%endif%}
+        </div>
+        <a href="/books" id = "go_back">Go Back</a>
+    </div>
+    {% if messages %}
+    <ul class="messages">    
+        {% for message in messages %}    
+            <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>    
+        {% endfor %}
+    </ul>
+    {% endif %}
+</body>
+</html>
